@@ -82,7 +82,7 @@ plot_grid_cells(fingerprint_predictors)
 
 We can also plot the fingerprints, which are all acceleration, lag acceleration points colored by density. For this plot we need the sub-second level walking data
 
-```{r, eval = FALSE}
+```{r}
 plot_fingerprints(walking_bouts,
                   lags = c(0.15, 0.30, 0.45),
                   sample_rate = 100)

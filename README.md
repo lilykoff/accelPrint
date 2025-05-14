@@ -126,3 +126,5 @@ plot_fingerprints(walking_bouts,
                   lags = c(0.15, 0.30, 0.45),
                   sample_rate = 100)
 ```
+
+<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
