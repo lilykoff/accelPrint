@@ -27,6 +27,10 @@ This is a basic example which shows you how to use the package
 
 ### Get walking bouts from raw accelerometry data
 
+We compute the bouts and plot the signal from the first 10s. There is no
+data plotted in second 5 because no steps were identified by ADEPT in
+that second.
+
 ``` r
 library(accelPrint)
 library(ggplot2)
@@ -60,7 +64,7 @@ head(walking_bouts)
 walking_bouts %>% 
   slice(1:(10 * 100)) %>% # take first 10 s 
   mutate(vm = sqrt(x^2 + y^2 + z^2)) %>% # compute vector magnitude
-  ggplot(aes(x = time, y = vm)) + 
+  ggplot(aes(x = time, y = vm, group=second)) + 
   geom_line() + 
   scale_x_datetime(date_labels = "%S") + 
   labs(x = "Time (s)", y = "Vector magnitude (g)")
@@ -69,6 +73,12 @@ walking_bouts %>%
 <img src="man/figures/README-example-1.png" width="100%" />
 
 ### Get fingerprint predictors from walking bouts
+
+Each column is one grid cell/lag combination, each row is a second. Each
+entry is the number of points in the grid cell for that lag. Column
+names are formatted as `range_lagrange_lag`, so `[0,0.25]_[0,0.25]_15`
+corresponds to number of points in range acceleration $\in [0,0.25]$,
+lag acceleration $\in [0,0.25]$, for a lag of 15 samples.
 
 ``` r
 # run the get grid cells function on the walking bouts
@@ -100,38 +110,5 @@ head(fingerprint_predictors)
 
 ``` r
 # plot 
-fingerprint_predictors %>% 
-  tidyr::pivot_longer(cols = -second) %>% 
-  tidyr::separate_wider_delim(name, delim = "_", names = c("vm", "lag_vm", "lag")) %>% 
-  mutate(lag = paste0("Lag = ", as.numeric(lag)/100, " sec")) %>% 
-  mutate(vm = factor(vm, levels = c("[0,0.25]", "(0.25,0.5]", 
-                                   "(0.5,0.75]", "(0.75,1]", "(1,1.25]", "(1.25,1.5]", 
-                                   "(1.5,1.75]", "(1.75,2]", "(2,2.25]", "(2.25,2.5]", 
-                                   "(2.5,2.75]", "(2.75,3]")),
-         lag_vm = factor(lag_vm, levels = c("[0,0.25]", "(0.25,0.5]",
-                                            "(0.5,0.75]", "(0.75,1]", "(1,1.25]",
-                                            "(1.25,1.5]", "(1.5,1.75]", "(1.75,2]",
-                                            "(2,2.25]", "(2.25,2.5]", "(2.5,2.75]",
-                                            "(2.75,3]"))) %>% 
-  mutate(across(contains("vm"), as.numeric)) %>% 
-  ggplot() + 
-  geom_rect(aes(xmin = vm - 1, xmax = vm, ymin = lag_vm - 1, ymax = lag_vm, fill = value), color = "black") +
-  theme_classic() +
-  scale_x_continuous(
-    name = "Acceleration (g)",
-    breaks = seq(0, 12, by = 1),
-    labels = c("0", "0.25", "0.5", "0.75", "1", "1.25", "1.5", "1.75", "2", "2.25", "2.5", "2.75", "3"),
-    expand = c(0, 0)
-  ) + 
-  scale_y_continuous(
-    name = "Lag acceleration (g)",
-    breaks = seq(0, 12, by = 2),
-    labels = c("0", "0.5", "1", "1.5", "2", "2.5", "3"),
-    expand = c(0, 0)
-  ) + 
-  viridis::scale_fill_viridis(name = "Number of points in cell") + 
-  facet_grid(lag ~ .) +
-  theme(legend.position = "bottom")
+plot_grid_cells(fingerprint_predictors)
 ```
-
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
