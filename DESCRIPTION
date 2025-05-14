@@ -28,6 +28,7 @@ Imports:
     ggplot2,
     lubridate,
     magrittr,
+    MASS,
     parallelly,
     purrr,
     tidyr,

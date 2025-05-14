@@ -78,7 +78,9 @@ Each column is one grid cell/lag combination, each row is a second. Each
 entry is the number of points in the grid cell for that lag. Column
 names are formatted as `range_lagrange_lag`, so `[0,0.25]_[0,0.25]_15`
 corresponds to number of points in range acceleration $\in [0,0.25]$,
-lag acceleration $\in [0,0.25]$, for a lag of 15 samples.
+lag acceleration $\in [0,0.25]$, for a lag of 15 samples. We are
+plotting the grid cell predictors over all seconds in the data here, but
+could filter to only one second or a subset of seconds if desired.
 
 ``` r
 # run the get grid cells function on the walking bouts
@@ -114,3 +116,13 @@ plot_grid_cells(fingerprint_predictors)
 ```
 
 <img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
+
+We can also plot the fingerprints, which are all acceleration, lag
+acceleration points colored by density. For this plot we need the
+sub-second level walking data
+
+``` r
+plot_fingerprints(walking_bouts,
+                  lags = c(0.15, 0.30, 0.45),
+                  sample_rate = 100)
+```
