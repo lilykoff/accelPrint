@@ -125,7 +125,7 @@ plot_fingerprints = function(data, lags, sample_rate = NULL, max_vm = 3){
     ggplot2::ggplot(ggplot2::aes(x = vm, y = lag_vm, color = density)) +
     ggplot2::geom_point(size = .85) +
     viridis::scale_color_viridis(name = "# points", option = "C") +
-    ggplot2::facet_grid(lag_id ~ .) +
+    ggplot2::facet_grid(lag ~ .) +
     ggplot2::labs(x = "Acceleration (g)", y = "Lag Acceleration (g)") +
     ggplot2::scale_x_continuous(limits = c(0, max_vm),
                                 breaks = seq(0, max_vm, 0.5)) +
