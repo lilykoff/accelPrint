@@ -112,3 +112,5 @@ head(fingerprint_predictors)
 # plot 
 plot_grid_cells(fingerprint_predictors)
 ```
+
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />

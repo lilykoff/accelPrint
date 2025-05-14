@@ -74,7 +74,7 @@ head(fingerprint_predictors)
 ```
 
 
-```{r, eval = FALSE}
+```{r}
 # plot 
 plot_grid_cells(fingerprint_predictors)
 ```
